@@ -10,8 +10,14 @@ angular.module('statsApp', ['ngRoute'])
             .when('/week', {
                 templateUrl: 'stats/statsWeek.txt'
             })
-            .when('/24-hours', {
+            .when('/day', {
                 templateUrl: 'stats/statsDay.txt'
+            })
+            .when('/weekS', {
+                templateUrl: 'stats/statsWeekS.txt'
+            })
+            .when('/dayS', {
+                templateUrl: 'stats/statsDayS.txt'
             })
             .otherwise('/week');
     });
