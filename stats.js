@@ -1,6 +1,6 @@
 angular.module('statsApp', ['ngRoute'])
     .controller('statsController', ['$scope', '$location', function($scope,$location) {
-        $scope.last_updated_file = 'stats/lastUpdated.txt';
+        $scope.last_updated_file = 'stats_files/lastUpdated.txt';
         $scope.isActive = function(viewLocation) {
             return viewLocation === $location.path();
         }
@@ -8,16 +8,16 @@ angular.module('statsApp', ['ngRoute'])
     .config(function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/week', {
-                templateUrl: 'stats/statsWeek.txt'
+                templateUrl: 'stats_files/statsWeek.txt'
             })
             .when('/day', {
-                templateUrl: 'stats/statsDay.txt'
+                templateUrl: 'stats_files/statsDay.txt'
             })
             .when('/weekS', {
-                templateUrl: 'stats/statsWeekS.txt'
+                templateUrl: 'stats_files/statsWeekS.txt'
             })
             .when('/dayS', {
-                templateUrl: 'stats/statsDayS.txt'
+                templateUrl: 'stats_files/statsDayS.txt'
             })
             .otherwise('/week');
     });
