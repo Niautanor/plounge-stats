@@ -19,7 +19,7 @@
         <script src="stats.js"></script>
     </head>
     <body>
-        <div class="container" ng-controller="statsController">
+        <div class="container">
             <nav id="myNavbar" class="navbar navbar-default navbar-fixed-top" role="navigation"> 
                 <div class="container">
                     <div class="navbar-header">
@@ -33,7 +33,7 @@
                         <a class="navbar-brand" href="//mlplounge.science/stats.html">/r/Mlplounge Rankings</a>
                     </div>
                     <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="nav navbar-nav">
+                        <ul class="nav navbar-nav" ng-controller="statsController">
                             <li target="_blank" ng-class="{ active : isActive('/week') }"><a href="#week">Comments per Week</a></li>
                             <li target="_blank" ng-class="{ active : isActive('/day') }"><a href="#day">Comments per Day</a></li>
                             <li target="_blank" ng-class="{ active : isActive('/weekS') }"><a href="#weekS">Submissions per Week</a></li>
@@ -45,7 +45,7 @@
             <div class="jumbotron">
                 <h4>powered by /u/__brony__ <small>and hosted by /u/niautanor</small></h4>
                 <div class="container">
-                    <small>Last updated: <span ng-include="last_updated_file"></span></small>
+                    <small>Last updated: <span ng-include="'stats_files/lastUpdated.txt'"></span></small>
                     <table class="table table-hover table-bordered">
                         <thead><tr><td>Rank</td><td>Name</td><td>Posts</td></tr></thead>
                         <tbody ng-view>
