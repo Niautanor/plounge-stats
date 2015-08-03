@@ -38,6 +38,14 @@
                             <li target="_blank" ng-class="{ active : isActive('/day') }"><a href="#day">Comments per Day</a></li>
                             <li target="_blank" ng-class="{ active : isActive('/weekS') }"><a href="#weekS">Submissions per Week</a></li>
                             <li target="_blank" ng-class="{ active : isActive('/dayS') }"><a href="#dayS">Submissions per Day</a></li>
+                            <li class="dropbodown">
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bee fillies <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#/bees-recent">Recent Bee fillies</a></li>
+                                    <li><a href="#/bees-week">Last Weeks Bee fillies</a></li>
+                                    <li><a href="#/bees-all">All Bee fillies</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -46,9 +54,9 @@
                 <h4>powered by /u/__brony__ <small>and hosted by /u/niautanor</small></h4>
                 <div class="container">
                     <small>Last updated: <span ng-include="'stats_files/lastUpdated.txt'"></span></small>
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-bordered" ng-view>
                         <thead><tr><td>Rank</td><td>Name</td><td>Posts</td></tr></thead>
-                        <tbody ng-view>
+                        <tbody>
                             <tr><td colspan="3">So you don't wanna enable Javascript huh? That's alright. The "raw" data is in /stats_files/stats{Day|Week}[S].txt (for example statsDayS.txt for daily submission stats)</td></tr>
                         </tbody>
                     </table>

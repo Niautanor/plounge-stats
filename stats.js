@@ -7,16 +7,25 @@ angular.module('statsApp', ['ngRoute'])
     .config(function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/week', {
-                templateUrl: 'stats_files/statsWeek.txt'
+                templateUrl: 'tables/statsWeek.html'
             })
             .when('/day', {
-                templateUrl: 'stats_files/statsDay.txt'
+                templateUrl: 'tables/statsDay.html'
             })
             .when('/weekS', {
-                templateUrl: 'stats_files/statsWeekS.txt'
+                templateUrl: 'tables/statsWeekS.html'
             })
             .when('/dayS', {
-                templateUrl: 'stats_files/statsDayS.txt'
+                templateUrl: 'tables/statsDayS.html'
+            })
+            .when('/bees-all', {
+                templateUrl: 'tables/beesAll.html'
+            })
+            .when('/bees-recent', {
+                templateUrl: 'tables/beesRecent.html'
+            })
+            .when('/bees-week', {
+                templateUrl: 'tables/beesWeek.html'
             })
             .otherwise('/week');
     });
