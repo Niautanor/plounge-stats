@@ -27,5 +27,8 @@ angular.module('statsApp', ['ngRoute'])
             .when('/bees-week', {
                 templateUrl: 'tables/beesWeek.html'
             })
+            .when('/other-subreddits', {
+                templateUrl: 'tables/otherSubreddits.html'
+            })
             .otherwise('/week');
     });
