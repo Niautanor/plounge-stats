@@ -73,7 +73,7 @@ class PloungeDB:
     self.db.commit()
 
 def main():
-  with PloungeDB('plounge.db') as db:
+  with PloungeDB('data/plounge.db') as db:
     print("Starting plounge comment gatherer")
     sub = praw.Reddit('mlplounge.science data collector') \
               .get_subreddit('mlplounge')
