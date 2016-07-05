@@ -1,3 +1,16 @@
 This repository contains a comment gatherer and statistics generation daemon for
 the /r/mlplounge subreddit. The statistics are available on
 https://mlplounge.science/stats
+
+Most of the ideas and some of the code are taken from
+https://github.com/trambelus/plounge-db though I have cleand it up and improved
+it in a few occasions (for one thing, it now tries to only request the comments
+that it hasn't seen yet)
+
+This repository also contains a systemd unit file that manages the comment
+gathering daemon. It should be symlinked to /etc/sytemd/system/
+
+TODOS:
+Set up a mail server and send me a mail if the daemon exits unexpectedly
+http://northernlightlabs.com/systemd.status.mail.on.unit.failure seems to detail
+how to do that

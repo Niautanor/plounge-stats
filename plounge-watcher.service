@@ -1,0 +1,11 @@
+[Unit]
+Description=Plounge-stats data collection service
+
+[Service]
+Type=simple
+User=plounge-stats
+Group=plounge-stats
+WorkingDirectory=/opt/plounge-db/
+ExecStart=/opt/plounge-db/watcher.py
+StandardOut=syslog
+StandardError=syslog
