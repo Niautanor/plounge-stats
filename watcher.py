@@ -79,6 +79,10 @@ def main():
               .get_subreddit('mlplounge')
     last_comment = None
     last_submission = None
+    # these variables limit the number of comments/submissions that get
+    # retrieved during an iteration. 0 means that the default limit for one page
+    # is used.
+    limit = 0
     while True:
       # counters to print out the number of new comments / submissions after
       # each iteration
@@ -88,7 +92,7 @@ def main():
       # the 'before' argument means that we only want to get comments which are
       # newer than the given id (which is the last one from the previous
       # request)
-      comments = sub.get_comments(limit=24, params={'before' : last_comment})
+      comments = sub.get_comments(limit=limit, params={'before' : last_comment})
       # Praw by default returns lists from newest to oldest. We want the other
       # direction to be able to update last_comment
       for c in reversed(list(comments)):
@@ -96,7 +100,7 @@ def main():
         last_comment = cid
         num_comments += 1
 
-      submissions = sub.get_new(limit=12, params={'before' : last_submission})
+      submissions = sub.get_new(limit=limit, params={'before' : last_submission})
       for s in reversed(list(submissions)):
         (sid, title, author, text, url, created, link) = db.insert_submission(s)
         last_submission = sid
@@ -108,6 +112,11 @@ def main():
       # secons. I technically don't request the same page (because 'before' is
       # different) but it is probably a good idea anyway
       time.sleep(120)
+      # Updates after the first one will be rather small, we can therefore set
+      # the limit to None to always get as many thing as possible (There will
+      # probably be only like <= 5 comments per iteration anyway so this doesn't
+      # add aditional stress on anything)
+      limit = None
 
 if __name__ == '__main__':
   main()
