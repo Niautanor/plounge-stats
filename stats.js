@@ -30,5 +30,8 @@ angular.module('statsApp', ['ngRoute'])
             .when('/other-subreddits', {
                 templateUrl: 'tables/otherSubreddits.html'
             })
+            .when('/;-;', {
+                templateUrl: 'tables/;-;.html'
+            })
             .otherwise('/week');
     });
