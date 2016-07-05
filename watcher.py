@@ -73,11 +73,17 @@ class PloungeDB:
     self.db.commit()
 
 with PloungeDB('plounge.db') as db:
+  print("Starting plounge comment gatherer")
   sub = praw.Reddit('mlplounge.science data collector') \
             .get_subreddit('mlplounge')
   last_comment = None
   last_submission = None
   while True:
+    # counters to print out the number of new comments / submissions after each
+    # iteration
+    num_comments = 0
+    num_submissions = 0
+
     # the 'before' argument means that we only want to get comments which are
     # newer than the given id (which is the last one from the previous request)
     comments = sub.get_comments(limit=24, params={'before' : last_comment})
@@ -85,16 +91,18 @@ with PloungeDB('plounge.db') as db:
     # direction to be able to update last_comment
     for c in reversed(list(comments)):
       (cid, cpid, author, body, created, permalink) = db.insert_comment(c)
-      print("Got comment %s by %s at %s" % (cid, author, created))
       last_comment = cid
+      num_comments += 1
+
     submissions = sub.get_new(limit=12, params={'before' : last_submission})
     for s in reversed(list(submissions)):
       (sid, title, author, text, url, created, link) = db.insert_submission(s)
-      print("Got submission %s by %s" % (sid, author))
       last_submission = sid
+      num_submissions += 1
+
     db.commit()
-    print("Commited database")
+    print("Added %d comments and %d submissions" % (num_comments, num_submissions))
     # Reddit doesn't want you to request the same page more than once every 30
     # secons. I technically don't request the same page (because 'before' is
     # different) but it is probably a good idea anyway
-    time.sleep(31)
+    time.sleep(120)
