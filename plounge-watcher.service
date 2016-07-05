@@ -7,5 +7,3 @@ User=plounge-stats
 Group=plounge-stats
 WorkingDirectory=/opt/plounge-db/
 ExecStart=/opt/plounge-db/watcher.py
-StandardOutput=syslog
-StandardError=syslog

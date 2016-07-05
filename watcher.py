@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3 -u
 # Plounge comment and submission gathering bot
 
 import time
