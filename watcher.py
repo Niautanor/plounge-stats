@@ -79,44 +79,68 @@ def main():
               .get_subreddit('mlplounge')
     last_comment = None
     last_submission = None
-    # these variables limit the number of comments/submissions that get
-    # retrieved during an iteration. 0 means that the default limit for one page
-    # is used.
+    # these variables limit the number of comments/submissions that
+    # get retrieved during an iteration. 0 means that the default
+    # limit for one page is used.
     limit = 0
     while True:
-      # counters to print out the number of new comments / submissions after
-      # each iteration
-      num_comments = 0
-      num_submissions = 0
+      try:
+        # counters to print out the number of new comments /
+        # submissions after each iteration
+        num_comments = 0
+        num_submissions = 0
 
-      # the 'before' argument means that we only want to get comments which are
-      # newer than the given id (which is the last one from the previous
-      # request)
-      comments = sub.get_comments(limit=limit, params={'before' : last_comment})
-      # Praw by default returns lists from newest to oldest. We want the other
-      # direction to be able to update last_comment
-      for c in reversed(list(comments)):
-        (cid, cpid, author, body, created, permalink) = db.insert_comment(c)
-        last_comment = cid
-        num_comments += 1
+        # the 'before' argument means that we only want to get
+        # comments which are newer than the given id (which is the
+        # last one from the previous
+        # request)
+        comments = sub.get_comments(limit=limit,
+                params={'before' : last_comment})
+        # Praw by default returns lists from newest to oldest. We want
+        # the other direction to be able to update last_comment
+        for c in reversed(list(comments)):
+          (cid, cpid, author, body, created, permalink) \
+                  = db.insert_comment(c)
+          last_comment = cid
+          num_comments += 1
 
-      submissions = sub.get_new(limit=limit, params={'before' : last_submission})
-      for s in reversed(list(submissions)):
-        (sid, title, author, text, url, created, link) = db.insert_submission(s)
-        last_submission = sid
-        num_submissions += 1
+        # It makes sense to commit here because we would lose a few
+        # comments if there is an exception while retrieving
+        # submissions and the loop gets restarted. We do not have to
+        # commit during the for c in comments loop because praw
+        # shouldn't make any requests (and therefore not throw any
+        # exceptions) during that.
+        # TODO: a better solution would probably to only update
+        # last_comment and last_submission if the loop finishes
+        # without an exception
+        db.commit()
 
-      db.commit()
-      print("Added %d comments and %d submissions" % (num_comments, num_submissions))
-      # Reddit doesn't want you to request the same page more than once every 30
-      # secons. I technically don't request the same page (because 'before' is
-      # different) but it is probably a good idea anyway
-      time.sleep(120)
-      # Updates after the first one will be rather small, we can therefore set
-      # the limit to None to always get as many thing as possible (There will
-      # probably be only like <= 5 comments per iteration anyway so this doesn't
-      # add aditional stress on anything)
-      limit = None
+        submissions = sub.get_new(limit=limit,
+                params={'before' : last_submission})
+        for s in reversed(list(submissions)):
+          (sid, title, author, text, url, created, link) \
+                  = db.insert_submission(s)
+          last_submission = sid
+          num_submissions += 1
+
+        db.commit()
+        print("Added %d comments and %d submissions"
+                % (num_comments, num_submissions))
+        # Reddit doesn't want you to request the same page more than
+        # once every 30 secons. I technically don't request the same
+        # page (because 'before' is different) but it is probably a
+        # good idea anyway
+        time.sleep(120)
+        # Updates after the first one will be rather small, we can
+        # therefore set the limit to None to always get as many thing
+        # as possible (There will probably be only like <= 5 comments
+        # per iteration anyway so this doesn't add aditional stress on
+        # anything)
+        limit = None
+      except (APIException, HTTPException):
+        print("Got an (probably temporary) exception from praw.")
+        print("Delaying for 30 seconds")
+        time.sleep(30)
 
 if __name__ == '__main__':
   main()
