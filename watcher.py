@@ -63,7 +63,7 @@ class PloungeDB:
     query = """INSERT OR IGNORE INTO submissions (
         id, title, author, selftext, url, udate, permalink
       ) VALUES ( ?, ?, ?, ?, ?, ?, ? )"""
-    created = time.strftime("%Y-%m-%d %X", time.gmtime(c.created_utc))
+    created = time.strftime("%Y-%m-%d %X", time.gmtime(s.created_utc))
     author = s.author.name if c.author != None else "[deleted]"
     data = (s.fullname, s.title, author, s.selftext, s.url, created, s.permalink)
     self.db.execute(query, data)
