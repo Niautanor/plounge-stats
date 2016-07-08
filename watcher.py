@@ -3,17 +3,19 @@
 
 import time
 import sqlite3
-import praw
-from praw.errors import APIException, HTTPException
-import logging
 import re
 
+import praw
+from praw.errors import APIException, HTTPException
+
 # This causes praw to print out all requests. Useful for debugging.
+# import logging
 # logging.basicConfig(level=logging.DEBUG)
 
 class PloungeDB:
   def __init__(self, filename):
     self.filename = filename
+    self.db = None
 
   def __enter__(self):
     self.db = sqlite3.connect(self.filename)
@@ -36,7 +38,7 @@ class PloungeDB:
     )""")
     return self
 
-  def __exit__(self, type, value, tb):
+  def __exit__(self, t, value, tb):
     self.db.close()
 
   def insert_comment(self, c):
@@ -82,8 +84,9 @@ def main():
     last_submission = None
     # these variables limit the number of comments/submissions that
     # get retrieved during an iteration. 0 means that the default
-    # limit for one page is used.
-    limit = 0
+    # limit for one page is used. None means that the maximum possible
+    # number of results is returned.
+    limit = None
     while True:
       try:
         # counters to print out the number of new comments /
@@ -96,7 +99,7 @@ def main():
         # last one from the previous
         # request)
         comments = sub.get_comments(limit=limit,
-                params={'before' : last_comment})
+                                    params={'before' : last_comment})
         # Praw by default returns lists from newest to oldest. We want
         # the other direction to be able to update last_comment
         for c in reversed(list(comments)):
@@ -117,7 +120,7 @@ def main():
         db.commit()
 
         submissions = sub.get_new(limit=limit,
-                params={'before' : last_submission})
+                                  params={'before' : last_submission})
         for s in reversed(list(submissions)):
           (sid, title, author, text, url, created, link) \
                   = db.insert_submission(s)
@@ -126,7 +129,7 @@ def main():
 
         db.commit()
         print("Added %d comments and %d submissions"
-                % (num_comments, num_submissions))
+              % (num_comments, num_submissions))
         # Reddit doesn't want you to request the same page more than
         # once every 30 secons. I technically don't request the same
         # page (because 'before' is different) but it is probably a
