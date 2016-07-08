@@ -4,6 +4,7 @@
 import time
 import sqlite3
 import praw
+from praw.errors import APIException, HTTPException
 import logging
 import re
 
