@@ -81,22 +81,58 @@ def main():
     sub = praw.Reddit('mlplounge.science data collector') \
               .get_subreddit('mlplounge')
     # this variable limits the number of comments/submissions that get
-    # retrieved during an iteration. 0 means that the default limit for one
-    # page is used. None means that the maximum possible number of results is
-    # returned.
+    # retrieved during an iteration. 0 means that the default limit
+    # for one page is used. None means that the maximum possible
+    # number of results is returned.
     limit = None
+    # these variables keep track of the last comment/submission that
+    # we have seen. They are useful to be able to catch up if we
+    # missed a comment.
+    last_comment = last_submission = None
     while True:
       try:
 
-        comments = sub.get_comments(limit=limit)
-        for c in comments:
-          (cid, cpid, author, body, created, permalink) \
-                  = db.insert_comment(c)
+        # the placeholder argument makes praw fetch content until the
+        # element with the given id (with the type designator (tx_)
+        # removed) has been reached. The difference to my 'before'
+        # solution is that in case of an invalid id, the maximum
+        # number of items is returned instead of an empty list
+        comments = sub.get_comments(limit=limit,
+                                    place_holder=last_comment)
+        # if this isn't here, we might run into a ValueError due to
+        # undefined variables. I would prefer it, if python set i to
+        # None automatically upon executing the loop header but I
+        # didn't make the rules.
+        i = None
+        for i, c in enumerate(comments):
+          cid = db.insert_comment(c)
+          if i == 0:
+            # the newest comment is always the first in the iterator
+            last_comment = cid[3:]
+        if i is None:
+          # the iterator didn't return any comments (it should always
+          # return at least up until (including) place_holder)
+          # Panic and reset last_comment in a hope to fix this
+          print("get_comments returned an empty list. PANIC!")
+          last_comment = None
+        else:
+          print("Inserted %d Comments" % (i))
 
-        submissions = sub.get_new(limit=limit)
-        for s in submissions:
-          (sid, title, author, text, url, created, link) \
-                  = db.insert_submission(s)
+        submissions = sub.get_new(limit=limit,
+                                  place_holder=last_submission)
+        i = None
+        for i, s in enumerate(submissions):
+          sid = db.insert_submission(s)
+          if i == 0:
+            last_submission = sid[3:]
+        if i is None:
+          # the iterator didn't return any comments (it should always
+          # return at least up until (including) place_holder)
+          # Panic and reset last_comment in a hope to fix this
+          print("get_new returned an empty list. PANIC!")
+          last_submission = None
+        else:
+          print("Inserted %d Submissions" % (i))
 
         # save the state of the database
         db.commit()
