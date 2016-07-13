@@ -59,7 +59,7 @@ class PloungeDB:
                          c.id])
     data = (c.fullname, c.parent_id, author, c.body, created, permalink)
     self.db.execute(query, data)
-    return data
+    return c.fullname
 
   def insert_submission(self, s):
     # basically the same as for the comments
@@ -70,7 +70,7 @@ class PloungeDB:
     author = s.author.name if s.author != None else "[deleted]"
     data = (s.fullname, s.title, author, s.selftext, s.url, created, s.permalink)
     self.db.execute(query, data)
-    return data
+    return s.fullname
 
   def commit(self):
     self.db.commit()
