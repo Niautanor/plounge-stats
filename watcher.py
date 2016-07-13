@@ -140,7 +140,7 @@ def main():
         # Reddit doesn't want you to request the same page more than
         # once every 30 secons. I technically don't request the same
         # page but it is probably a good idea anyway
-        time.sleep(31)
+        time.sleep(118)
         # Updates after the first one will be rather small, we can
         # therefore set the limit to 0 to always get as many things
         # as possible with a single query. Previously, there was a
