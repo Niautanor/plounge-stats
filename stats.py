@@ -107,9 +107,6 @@ def process():
 		with getfile("lastUpdated.txt") as f:
 			f.write(bytes(time.strftime("%Y-%m-%d %X") + " UTC", 'UTF-8'))
 
-	except Exception as ex:
-		print(ex)
-		return 45
 	finally:
 		if db:
 			db.close()
