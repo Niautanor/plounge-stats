@@ -101,7 +101,7 @@ def process():
 		                  AND author != '[deleted]'
 		                  AND body = ';-;'
 		                  GROUP BY author ORDER BY count(*) DESC""",
-		           "<tr><td>%d</td><td>%s</td><td>%d</td></tr>",
+		           "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>",
 		           getfile(";-;.txt"))
 
 		with getfile("lastUpdated.txt") as f:
