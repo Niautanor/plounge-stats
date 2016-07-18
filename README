@@ -8,7 +8,8 @@ it in a few occasions (for one thing, it now tries to only request the comments
 that it hasn't seen yet)
 
 This repository also contains a systemd unit file that manages the comment
-gathering daemon. It should be symlinked to /etc/sytemd/system/
+gathering daemon. It can be installed with `systemctl install
+./plounge-watcher.service` (run from the git repository).
 
 TODOS:
 Set up a mail server and send me a mail if the daemon exits unexpectedly

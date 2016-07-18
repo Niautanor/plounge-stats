@@ -11,3 +11,6 @@ ExecStart=/opt/plounge-db/watcher.py
 Restart=always
 # Restart after 30 minutes (1800 seconds)
 RestartSec=1800
+
+[Install]
+WantedBy=multi-user.target
