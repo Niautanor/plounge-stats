@@ -11,6 +11,9 @@ This repository also contains a systemd unit file that manages the comment
 gathering daemon. It can be installed with `systemctl install
 ./plounge-watcher.service` (run from the git repository).
 
+It also contains a systemd unit file for the stats generation that behaves
+pretty much identically.
+
 TODOS:
 Set up a mail server and send me a mail if the daemon exits unexpectedly
 http://northernlightlabs.com/systemd.status.mail.on.unit.failure seems to detail
