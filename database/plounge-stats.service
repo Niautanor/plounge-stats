@@ -1,0 +1,16 @@
+[Unit]
+Description=Plounge-stats statistics generation service
+
+[Service]
+Type=simple
+User=plounge-stats
+Group=plounge-stats
+WorkingDirectory=/opt/plounge-db/
+ExecStart=/opt/plounge-db/stats.py
+# Always restart the service unles it is explicitly terminated by systemctl
+Restart=always
+# Restart after 30 minutes (1800 seconds)
+RestartSec=1800
+
+[Install]
+WantedBy=multi-user.target

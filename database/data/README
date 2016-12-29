@@ -1,0 +1,2 @@
+this directory contains the main database plounge.db that gets created by the
+watcher script. This README file exists so that git can create the directory.
